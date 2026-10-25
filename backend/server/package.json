@@ -1,0 +1,23 @@
+{
+  "name": "domboshava-lis-server",
+  "version": "0.1.0",
+  "description": "API for the Domboshava Ward 4 Homestead Register (HSVG437 capstone)",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "node --test --test-concurrency=1",
+    "create-user": "node scripts/create-user.js"
+  },
+  "license": "UNLICENSED",
+  "dependencies": {
+    "compression": "^1.8.2",
+    "dotenv": "^16.6.1",
+    "express": "^5.3.0",
+    "pg": "^8.23.1"
+  },
+  "private": true,
+  "engines": {
+    "node": ">=20"
+  }
+}

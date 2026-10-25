@@ -1,0 +1,422 @@
+/* Domboshava Ward 4 homestead register
+   No web fonts and no framework: every kilobyte is paid for by someone
+   on a metered bundle. The one bold element is the stand-check result,
+   set like an entry in a ruled allocation book. */
+
+:root {
+  --lichen: #eef1ec;       /* granite lichen: the ground */
+  --paper: #fbfcfa;        /* panel and slip surface */
+  --ink: #1f2a44;          /* ledger ink */
+  --ink-soft: #55607a;
+  --rule: #b9c7d8;         /* ruled-line blue */
+  --rule-strong: #8fa5bf;
+  --margin-red: #c4625a;   /* the margin line of a ruled book */
+  --action: #2f5d8a;
+  --action-dark: #234a70;
+  --danger: #9b2f24;
+  --ok: #1d6b4f;
+
+  /* status colours: Okabe-Ito, distinguishable with colour-vision deficiency,
+     and always paired with a word (never colour alone) */
+  --s-recognised: #009e73;
+  --s-customary: #e69f00;
+  --s-unrecognised: #d55e00;
+  --s-disputed: #cc79a7;
+  --s-none: #6b7280;
+
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", Ubuntu, sans-serif;
+  --step--1: 0.8125rem;   /* 13px */
+  --step-0: 0.9375rem;    /* 15px */
+  --step-1: 1.0625rem;    /* 17px */
+  --step-2: 1.3125rem;    /* 21px */
+  --step-3: 1.75rem;      /* 28px */
+  --gap: 1rem;
+  --panel-w: 400px;
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--lichen);
+  color: var(--ink);
+  font: var(--step-0)/1.5 var(--font);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+h1, h2, h3, h4 { margin: 0; line-height: 1.25; }
+p { margin: 0; }
+a { color: var(--action); }
+a:hover { color: var(--action-dark); }
+
+:focus-visible {
+  outline: 3px solid var(--action);
+  outline-offset: 2px;
+}
+
+.skip {
+  position: absolute; left: -999px; top: 0;
+  background: var(--paper); padding: 0.5rem 1rem; z-index: 2000;
+}
+.skip:focus { left: 0.5rem; top: 0.5rem; }
+
+[hidden] { display: none !important; }
+
+/* ---------- Masthead -------------------------------------------------- */
+.masthead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.25rem 1.5rem;
+  padding: 0.875rem var(--gap) 0.75rem;
+  border-bottom: 1px solid var(--rule);
+}
+.masthead h1 {
+  font-size: var(--step-2);
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+.masthead-sub { color: var(--ink-soft); font-size: var(--step--1); }
+.demo-flag {
+  font-size: var(--step--1);
+  color: var(--ink);
+  border-left: 3px solid var(--margin-red);
+  padding-left: 0.5rem;
+  max-width: 30rem;
+}
+
+/* ---------- Stand check strip ----------------------------------------- */
+.check {
+  padding: 0.75rem var(--gap) 0.875rem;
+  border-bottom: 1px solid var(--rule);
+  background: var(--paper);
+}
+.check-lead {
+  font-size: var(--step-1);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+.check-fields {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.5rem 0.75rem;
+}
+.check-error { color: var(--danger); margin-top: 0.5rem; font-size: var(--step--1); }
+
+/* ---------- Form controls --------------------------------------------- */
+.field { display: flex; flex-direction: column; gap: 0.2rem; font-size: var(--step--1); color: var(--ink-soft); }
+.field > span { font-weight: 500; }
+.field-inline { flex-direction: row; align-items: center; gap: 0.5rem; }
+.field-narrow input { width: 9rem; }
+
+input, select, textarea, button { font: inherit; color: inherit; }
+input, select, textarea {
+  font-size: 1rem;              /* 16px stops phones zooming on focus */
+  min-height: 2.75rem;          /* thumb-sized */
+  padding: 0.45rem 0.6rem;
+  border: 1px solid var(--rule-strong);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--ink);
+}
+textarea { min-height: 4rem; width: 100%; resize: vertical; }
+input[aria-invalid="true"], select[aria-invalid="true"] { border-color: var(--danger); }
+
+.btn {
+  min-height: 2.75rem;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  border: 1px solid var(--rule-strong);
+  background: var(--paper);
+  color: var(--ink);
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn:hover { border-color: var(--action); }
+.btn-primary { background: var(--action); border-color: var(--action); color: #fff; }
+.btn-primary:hover { background: var(--action-dark); border-color: var(--action-dark); }
+.btn[disabled] { opacity: 0.5; cursor: not-allowed; }
+.btn-small { min-height: 2.25rem; padding: 0.25rem 0.7rem; font-size: var(--step--1); }
+.btn-link {
+  background: none; border: 0; padding: 0; min-height: 0;
+  color: var(--action); text-decoration: underline; font-weight: 500; cursor: pointer;
+}
+
+/* ---------- Workspace: map + panel ------------------------------------ */
+.workspace {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--panel-w);
+  min-height: 0;
+}
+.map-wrap { position: relative; min-height: 420px; }
+#map { position: absolute; inset: 0; background: #dfe5dd; }
+
+.map-bar {
+  position: absolute; z-index: 800; top: 0.5rem; left: 50%; transform: translateX(-50%);
+  background: var(--paper); border: 1px solid var(--rule); border-radius: 6px;
+  padding: 0.3rem 0.75rem; font-size: var(--step--1);
+  box-shadow: 0 1px 2px rgba(31, 42, 68, 0.12);
+  max-width: calc(100% - 6rem);
+}
+.map-bar:empty { display: none; }
+.map-bar.is-error { border-color: var(--danger); color: var(--danger); }
+
+.panel {
+  background: var(--paper);
+  border-left: 1px solid var(--rule);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  max-height: calc(100vh - 10rem);
+}
+.tabs {
+  display: flex;
+  border-bottom: 1px solid var(--rule);
+  position: sticky; top: 0; background: var(--paper); z-index: 2;
+}
+.tab {
+  flex: 1;
+  min-height: 2.9rem;
+  background: none;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  color: var(--ink-soft);
+  font-weight: 600;
+  cursor: pointer;
+}
+.tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--ink); }
+.view { padding: var(--gap); overflow-y: auto; flex: 1; }
+.empty { color: var(--ink-soft); }
+
+/* ---------- Status swatches and badges -------------------------------- */
+.swatch {
+  display: inline-block; width: 0.85rem; height: 0.85rem; border-radius: 2px;
+  vertical-align: -0.1em; margin-right: 0.4rem; flex: none;
+  border: 1.5px solid transparent;
+}
+.swatch.s-RECOGNISED         { background: var(--s-recognised); }
+.swatch.s-CUSTOMARY_ONLY     { background: var(--s-customary); }
+.swatch.s-UNRECOGNISED_CLAIM { background: var(--s-unrecognised); }
+.swatch.s-DISPUTED           { background: var(--s-disputed); }
+.swatch.s-NO_RIGHT           { background: transparent; border: 1.5px dashed var(--s-none); }
+
+.badge {
+  display: inline-flex; align-items: center;
+  font-size: var(--step--1); font-weight: 600;
+  white-space: nowrap;
+}
+
+/* ---------- Filters and list ------------------------------------------ */
+.filters { border: 0; padding: 0; margin: 0 0 0.75rem; display: grid; gap: 0.5rem; }
+.filters legend { font-weight: 600; margin-bottom: 0.25rem; padding: 0; }
+.filter-statuses { display: flex; flex-wrap: wrap; gap: 0.25rem 0.9rem; }
+.filter-statuses label { display: inline-flex; align-items: center; gap: 0.35rem; min-height: 2.25rem; font-size: var(--step--1); cursor: pointer; }
+.filter-statuses input { min-height: 0; width: 1.05rem; height: 1.05rem; margin: 0; }
+
+.list-count { font-size: var(--step--1); color: var(--ink-soft); margin-bottom: 0.25rem; }
+.list { list-style: none; margin: 0; padding: 0; }
+.list li { border-bottom: 1px solid var(--rule); }
+.list button {
+  width: 100%; text-align: left; background: none; border: 0; cursor: pointer;
+  padding: 0.6rem 0.25rem; display: grid; grid-template-columns: 1fr auto; gap: 0.1rem 0.75rem;
+  min-height: 2.75rem;
+}
+.list button:hover, .list li.is-selected button { background: #eef3f8; }
+.list .upi { font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: 0.01em; }
+.list .where { color: var(--ink-soft); font-size: var(--step--1); grid-column: 1; }
+.list .badge { grid-row: 1 / span 2; grid-column: 2; align-self: center; }
+
+/* ---------- The slip: a ruled register entry -------------------------- */
+/* Every line in the slip is exactly one rule (1.75rem) tall and nothing
+   has a vertical margin, so text always sits on a ruled line. */
+.slip {
+  --line: 1.75rem;
+  position: relative;
+  background:
+    linear-gradient(to right, transparent 2.2rem, var(--margin-red) 2.2rem, var(--margin-red) calc(2.2rem + 1px), transparent calc(2.2rem + 1px)),
+    repeating-linear-gradient(to bottom, var(--paper) 0, var(--paper) calc(var(--line) - 1px), var(--rule) calc(var(--line) - 1px), var(--rule) var(--line));
+  background-position: 0 0, 0 -0.25rem;   /* rule just under the baseline */
+  border: 1px solid var(--rule-strong);
+  border-radius: 4px;
+  padding: 0 0.9rem 0.875rem 3rem;
+  line-height: var(--line);
+}
+.slip p, .slip h3, .slip ul, .slip li { margin: 0; }
+/* the page heading: unruled, three lines tall */
+.slip-head {
+  height: calc(var(--line) * 3);
+  margin-left: calc(-0.8rem + 1px);        /* reach back to the margin line */
+  padding-left: calc(0.8rem - 1px);
+  background: var(--paper);
+  border-bottom: 2px solid var(--ink);
+}
+.slip-upi {
+  font-size: var(--step-3);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+  line-height: calc(var(--line) * 2);
+}
+.slip-where { color: var(--ink-soft); line-height: calc(var(--line) - 2px); }
+.slip-status {
+  font-size: var(--step-2);
+  font-weight: 700;
+  display: flex; align-items: center;
+}
+.slip-status .swatch { width: 1.1rem; height: 1.1rem; }
+.slip-advice { max-width: 34rem; }
+.slip h3 { font-size: var(--step-0); font-weight: 650; line-height: var(--line); }
+.slip ul { margin: 0; padding: 0; list-style: none; }
+.slip li { line-height: 1.75rem; }
+.slip .muted { color: var(--ink-soft); font-size: var(--step--1); }
+.slip-notice { font-size: var(--step--1); color: var(--ink-soft); }
+.slip-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.75rem; }
+
+/* past rights: struck through, as in a book */
+.right-past { color: var(--ink-soft); }
+.right-past .right-label { text-decoration: line-through; text-decoration-color: var(--margin-red); }
+.holders { font-size: var(--step--1); }
+.evidence { font-size: var(--step--1); color: var(--ink-soft); }
+
+/* ---------- Clerk forms ----------------------------------------------- */
+.clerk-block { margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--rule); }
+/* let form controls shrink with their column instead of overflowing it */
+.form-grid > *, .form-row > *, .holder > * { min-width: 0; }
+.clerk-block .field > input, .clerk-block .field > select, .clerk-block .field > textarea { width: 100%; }
+.clerk-block h3 { font-size: var(--step-1); margin-bottom: 0.5rem; }
+.form-grid { display: grid; gap: 0.75rem; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+.choice { display: flex; flex-direction: column; gap: 0.2rem; border: 0; margin: 0; padding: 0; }
+.choice legend { font-size: var(--step--1); color: var(--ink-soft); font-weight: 500; padding: 0; margin-bottom: 0.2rem; }
+.choice label { display: flex; gap: 0.5rem; align-items: flex-start; font-size: var(--step--1); min-height: 2rem; cursor: pointer; }
+.choice input { min-height: 0; margin-top: 0.2rem; }
+.holder {
+  display: grid;
+  grid-template-columns: 1fr 5.5rem;
+  gap: 0.4rem;
+  padding: 0.6rem;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  background: #fff;
+}
+.holder .holder-name { grid-column: 1 / -1; }
+.holder .share { display: flex; align-items: center; gap: 0.3rem; }
+.holder .share input { width: 3.5rem; text-align: center; }
+.holder-remove { justify-self: end; grid-column: 1 / -1; }
+.share-total { font-size: var(--step--1); font-weight: 600; }
+.share-total.is-ok { color: var(--ok); }
+.share-total.is-bad { color: var(--danger); }
+.form-error { color: var(--danger); font-size: var(--step--1); }
+
+/* ---------- Council tab ------------------------------------------------ */
+.figures { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem; margin: 0.75rem 0 1rem; }
+.figure { border-top: 2px solid var(--ink); padding-top: 0.35rem; }
+.figure strong { display: block; font-size: var(--step-3); font-variant-numeric: tabular-nums; line-height: 1.1; }
+.figure span { font-size: var(--step--1); color: var(--ink-soft); }
+.table-wrap { overflow-x: auto; margin: 0.5rem 0 1rem; }
+table { border-collapse: collapse; width: 100%; font-size: var(--step--1); font-variant-numeric: tabular-nums; }
+th, td { padding: 0.4rem 0.5rem; border-bottom: 1px solid var(--rule); text-align: right; white-space: nowrap; }
+th:first-child, td:first-child { text-align: left; }
+thead th { font-weight: 600; color: var(--ink-soft); vertical-align: bottom; white-space: normal; }
+.task-list { list-style: none; margin: 0 0 1rem; padding: 0; }
+.task-list li { padding: 0.5rem 0; border-bottom: 1px solid var(--rule); font-size: var(--step--1); }
+.task-list .row-head { display: flex; justify-content: space-between; gap: 0.5rem; align-items: baseline; }
+.match-form { display: flex; gap: 0.4rem; margin-top: 0.35rem; }
+.match-form input { flex: 1; min-width: 0; min-height: 2.25rem; font-size: 0.95rem; }
+.council-head { display: flex; justify-content: space-between; align-items: baseline; gap: 0.5rem; }
+.council-section h3 { font-size: var(--step-1); margin: 1rem 0 0.35rem; }
+.council-section > p { font-size: var(--step--1); color: var(--ink-soft); }
+
+/* ---------- Map: legend, village labels, popups ------------------------ */
+.legend {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 0.5rem 0.65rem;
+  font: var(--step--1)/1.45 var(--font);
+  color: var(--ink);
+  max-width: 15rem;
+}
+.legend h2 { font-size: var(--step--1); font-weight: 650; margin-bottom: 0.2rem; }
+.legend ul { list-style: none; margin: 0; padding: 0; }
+.legend li { display: flex; align-items: center; }
+.legend .note { color: var(--ink-soft); margin-top: 0.25rem; }
+.legend-toggle { display: none; }
+
+.village-label {
+  background: transparent; border: 0; box-shadow: none;
+  font: 600 var(--step--1)/1 var(--font);
+  color: var(--ink);
+  text-shadow: 0 0 3px #fff, 0 0 3px #fff, 0 0 3px #fff;
+}
+.village-label::before { display: none; }
+.leaflet-popup-content { font: var(--step--1)/1.5 var(--font); margin: 0.6rem 0.8rem; }
+.leaflet-popup-content .upi { font-weight: 700; font-size: var(--step-0); font-variant-numeric: tabular-nums; }
+.leaflet-container a.btn-link { color: var(--action); }
+
+/* ---------- Toast and footer ------------------------------------------- */
+.toast {
+  position: fixed; left: 50%; bottom: 1.25rem; transform: translateX(-50%);
+  background: var(--ink); color: #fff; padding: 0.6rem 1rem; border-radius: 6px;
+  z-index: 3000; font-weight: 600; max-width: calc(100% - 2rem);
+}
+.foot {
+  padding: 0.75rem var(--gap) 1rem;
+  font-size: var(--step--1);
+  color: var(--ink-soft);
+  border-top: 1px solid var(--rule);
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem 1.5rem;
+}
+.foot p:first-child { max-width: 48rem; }
+.foot a { margin-left: 0.75rem; }
+
+/* ---------- Phones and narrow windows ---------------------------------- */
+@media (max-width: 820px) {
+  .workspace { display: block; }
+  .map-wrap { height: 52vh; min-height: 300px; }
+  .panel { border-left: 0; border-top: 1px solid var(--rule); max-height: none; }
+  .view { overflow: visible; }
+  .check-fields .field:first-child { flex: 1 1 10rem; }
+  .check-fields .field:first-child select { width: 100%; }
+  .field-narrow { flex: 1 1 8rem; }
+  .field-narrow input { width: 100%; }
+  .check-fields .btn { flex: 1 1 100%; }
+  .legend .legend-body[hidden] { display: none; }
+  .legend-toggle { display: inline; }
+}
+@media (max-width: 420px) {
+  .slip { padding-left: 2.4rem; background:
+    linear-gradient(to right, transparent 1.7rem, var(--margin-red) 1.7rem, var(--margin-red) calc(1.7rem + 1px), transparent calc(1.7rem + 1px)),
+    repeating-linear-gradient(to bottom, var(--paper) 0, var(--paper) calc(var(--line) - 1px), var(--rule) calc(var(--line) - 1px), var(--rule) var(--line));
+    background-position: 0 0, 0 -0.25rem; }
+  .slip-head { margin-left: calc(-0.7rem + 1px); padding-left: calc(0.7rem - 1px); }
+  .slip-upi { font-size: var(--step-2); }
+  .form-row { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
+}
+
+/* ---------- Print: the slip only, for a resident to take away ---------- */
+@media print {
+  @page { margin: 15mm; }
+  body { background: #fff; display: block; }
+  .skip, .check, .map-wrap, .tabs, #view-list, #view-council, .toast,
+  .slip-actions, .clerk-block, .foot a, .demo-flag { display: none !important; }
+  .masthead { border: 0; padding: 0 0 6mm; }
+  .workspace { display: block; }
+  .panel { border: 0; max-height: none; background: #fff; }
+  #view-homestead { display: block !important; padding: 0; }
+  .slip { border-color: #999; break-inside: avoid; }
+  .foot { border: 0; padding: 6mm 0 0; color: #333; }
+  .demo-print { display: block !important; }
+}
+.demo-print { display: none; font-size: var(--step--1); margin-top: 0.5rem; }

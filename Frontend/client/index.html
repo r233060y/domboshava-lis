@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Domboshava Ward 4 homestead register</title>
+  <meta name="description" content="Check a homestead in Domboshava Ward 4 before you pay for it. Synthetic demonstration data.">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha384-sHL9NAb7lN7rfvG5lfHpm643Xkcjzp4jFvuavGOndn6pjVqS6ny56CAt3nsEVT4H" crossorigin="anonymous">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip" href="#panel">Skip to the register</a>
+
+  <header class="masthead">
+    <div class="masthead-title">
+      <h1>Domboshava Ward 4 homestead register</h1>
+      <p class="masthead-sub">Goromonzi Rural District Council</p>
+    </div>
+    <p class="demo-flag" role="note">Demonstration. Every person and boundary here is invented.</p>
+  </header>
+
+  <form class="check" id="check-form" novalidate>
+    <h2 class="check-lead" id="check-lead">Check a homestead before you pay for it</h2>
+    <div class="check-fields" role="group" aria-labelledby="check-lead">
+      <label class="field">
+        <span>Village</span>
+        <select id="check-village" required>
+          <option value="">Choose…</option>
+        </select>
+      </label>
+      <label class="field field-narrow">
+        <span>Homestead number</span>
+        <input id="check-number" inputmode="numeric" pattern="[0-9]*" maxlength="5" autocomplete="off" required>
+      </label>
+      <button type="submit" class="btn btn-primary">Check</button>
+    </div>
+    <p class="check-error" id="check-error" role="alert" hidden></p>
+  </form>
+
+  <main class="workspace">
+    <section class="map-wrap" aria-label="Map of homesteads">
+      <div id="map"></div>
+      <div class="map-bar" id="map-bar" role="status" aria-live="polite"></div>
+    </section>
+
+    <section class="panel" id="panel" aria-label="Register">
+      <div class="tabs" role="tablist" aria-label="Register views">
+        <button class="tab" role="tab" id="tab-list" aria-controls="view-list" aria-selected="true">In view</button>
+        <button class="tab" role="tab" id="tab-homestead" aria-controls="view-homestead" aria-selected="false" tabindex="-1">Homestead</button>
+        <button class="tab" role="tab" id="tab-council" aria-controls="view-council" aria-selected="false" tabindex="-1">Council</button>
+      </div>
+
+      <div class="view" role="tabpanel" id="view-list" aria-labelledby="tab-list">
+        <fieldset class="filters">
+          <legend>Show</legend>
+          <div class="filter-statuses" id="filter-statuses"></div>
+          <label class="field field-inline">
+            <span>Village</span>
+            <select id="filter-village"><option value="">All villages</option></select>
+          </label>
+        </fieldset>
+        <p class="list-count" id="list-count" aria-live="polite"></p>
+        <ol class="list" id="list"></ol>
+      </div>
+
+      <div class="view" role="tabpanel" id="view-homestead" aria-labelledby="tab-homestead" hidden>
+        <div id="homestead">
+          <p class="empty">Choose a homestead on the map or in the list, or check one by its number above.</p>
+        </div>
+      </div>
+
+      <div class="view" role="tabpanel" id="view-council" aria-labelledby="tab-council" hidden>
+        <div id="council"></div>
+      </div>
+    </section>
+  </main>
+
+  <p class="toast" id="toast" role="status" aria-live="polite" hidden></p>
+
+  <footer class="foot">
+    <p>Boundaries are indicative and carry no legal weight. This register is not a title deed.
+       Communal land cannot lawfully be sold. Ask the Goromonzi RDC office before paying for any homestead.</p>
+    <p><a href="/api/">API</a> <a href="/api/metadata">Metadata</a></p>
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+          integrity="sha384-cxOPjt7s7Iz04uaHJceBmS+qpjv2JkIHNVcuOrM+YHwZOmJGBXI00mdUXEq65HTH" crossorigin="anonymous"></script>
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
